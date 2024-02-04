@@ -1,0 +1,25 @@
+[
+    { "id": 1, "origen": "Quito", "destino": "Guayaquil" },
+    { "id": 2, "origen": "Guayaquil", "destino": "Cuenca" },
+    { "id": 3, "origen": "Quito", "destino": "Cuenca" },
+    { "id": 4, "origen": "Cuenca", "destino": "Machala" },
+    { "id": 5, "origen": "Machala", "destino": "Loja" },
+    { "id": 6, "origen": "Quito", "destino": "Ambato" },
+    { "id": 7, "origen": "Ambato", "destino": "Riobamba" },
+    { "id": 8, "origen": "Riobamba", "destino": "Latacunga" },
+    { "id": 9, "origen": "Latacunga", "destino": "Santo Domingo" },
+    { "id": 10, "origen": "Santo Domingo", "destino": "Esmeraldas" },
+    { "id": 11, "origen": "Esmeraldas", "destino": "Manta" },
+    { "id": 12, "origen": "Manta", "destino": "Portoviejo" },
+    { "id": 13, "origen": "Portoviejo", "destino": "Santa Elena" },
+    { "id": 14, "origen": "Santa Elena", "destino": "Playas" },
+    { "id": 15, "origen": "Quito", "destino": "Ibarra" },
+    { "id": 16, "origen": "Ibarra", "destino": "Otavalo" },
+    { "id": 17, "origen": "Quito", "destino": "Sangolquí" },
+    { "id": 18, "origen": "Sangolquí", "destino": "Machachi" },
+    { "id": 19, "origen": "Guayaquil", "destino": "Salinas" },
+    { "id": 20, "origen": "Cuenca", "destino": "Azogues" }
+  ]
+
+
+  

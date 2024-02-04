@@ -1,0 +1,39 @@
+[
+    {
+      "id": 1,
+      "placa": "ABC-123",
+      "vehiculo": "Camioneta Toyota",
+      "id_propietario": 1
+    },
+    {
+      "id": 2,
+      "placa": "BCD-234",
+      "vehiculo": "Carro Chevrolet Spark",
+      "id_propietario": 2
+    },
+    {
+      "id": 3,
+      "placa": "CDE-345",
+      "vehiculo": "Camioneta Ford",
+      "id_propietario": 2
+    },
+    {
+      "id": 4,
+      "placa": "DEF-456",
+      "vehiculo": "Carro Renault",
+      "id_propietario": 4
+    },
+    {
+      "id": 5,
+      "placa": "EFG-567",
+      "vehiculo": "Camioneta Mazda",
+      "id_propietario": 5
+    },
+    {
+      "id":6,
+      "placa":"EFG-767",
+      "vehiculo":"Camioneta Ford",
+      "id_propietario":3
+    }
+  ]
+  
