@@ -1,34 +1,12 @@
 import { useState } from "react";
 import { InputCustom } from "./InputCustom";
-import { Ubicacion } from "../interfaces/type";
+import { ControlCombustible, Ubicacion } from "../interfaces/type";
 import { InputConductor } from "./InputConductor";
 import { InputPlaca } from "./InputPlaca";
 import { InputVehiculo } from "./InputVehiculo";
 import { useUbicacionStore } from "../store/UbicacionStore";
-import { SelectCustom } from "./SelectCustom";
-import { useRegistroForm } from "../hooks/useRegistroForm";
-
-export interface ControlCombustible {
-  date: string;
-  placa: string;
-  vehiculo: string;
-  conductor: string;
-  origenUbicacion: string;
-  destinoUbicacion: string;
-  kmInicial: number;
-  kmFinal: number;
-  kmRecorridos: number;
-  galon: number;
-  valorCompra: number;
-  kmPorGalon: number;
-  KmPorMoneda: number;
-  tipoCombustible: string;
-  NumeroDocumento: string;
-  comentario: string;
-}
 
 export const RegistroForm = () => {
-  const { optionsNombres, optionsPlacas } = useRegistroForm();
   const [isFocusOrigen, setIsFocusOrigen] = useState({
     isFocusInput: false,
     isFocusDropdown: false,
