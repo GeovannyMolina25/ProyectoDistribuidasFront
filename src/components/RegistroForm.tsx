@@ -5,12 +5,21 @@ import { InputConductor } from "./InputConductor";
 import { InputPlaca } from "./InputPlaca";
 import { InputVehiculo } from "./InputVehiculo";
 import { useUbicacionStore } from "../store/UbicacionStore";
-
+import {
+  getKilometroPorGalon,
+  getKilometroPorMoneda,
+  getKilometroRecorrido,
+} from "../helpers/getCalculos";
+import trash from "../assets/trash.svg";
+import { useConductorStore } from "../store/ConductorStore";
+import { useVehiculoStore } from "../store/VehiculoStore";
 export const RegistroForm = () => {
   const [isFocusOrigen, setIsFocusOrigen] = useState({
     isFocusInput: false,
     isFocusDropdown: false,
   });
+  const { limpiarConductor } = useConductorStore();
+  const { limpiarVehiculo } = useVehiculoStore();
   const [isFocusDestino, setIsFocusDestino] = useState({
     isFocusInput: false,
     isFocusDropdown: false,
@@ -63,14 +72,79 @@ export const RegistroForm = () => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(controlCombustible);
   };
+  const handleClearVehiculoConductor = () => {
+    limpiarConductor();
+    limpiarVehiculo();
+    setControlCombustible({
+      ...controlCombustible,
+      conductor: "",
+      vehiculo: "",
+      placa: "",
+    });
+  };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setControlCombustible({
       ...controlCombustible,
-      [name]: value,
+      [name]: String(value),
     });
+    if (!isNaN(0.01)) {
+      if (name === "kmInicial") {
+        setControlCombustible({
+          ...controlCombustible,
+          [name]: parseFloat(value),
+          kmRecorridos: getKilometroRecorrido(
+            parseFloat(value),
+            controlCombustible.kmFinal
+          ),
+          kmPorGalon: getKilometroPorGalon(
+            controlCombustible.kmRecorridos || 0,
+            controlCombustible.kmPorGalon || 0
+          ),
+          KmPorMoneda: getKilometroPorMoneda(
+            controlCombustible.kmRecorridos || 0,
+            controlCombustible.valorCompra || 0
+          ),
+        });
+      } else if (name === "kmFinal") {
+        setControlCombustible({
+          ...controlCombustible,
+          [name]: parseFloat(value),
+          kmRecorridos: getKilometroRecorrido(
+            controlCombustible.kmInicial,
+            parseFloat(value)
+          ),
+          kmPorGalon: getKilometroPorGalon(
+            controlCombustible.kmRecorridos,
+            controlCombustible.galon
+          ),
+          KmPorMoneda: getKilometroPorMoneda(
+            controlCombustible.kmRecorridos,
+            controlCombustible.valorCompra
+          ),
+        });
+      } else if (name === "galon") {
+        setControlCombustible({
+          ...controlCombustible,
+          [name]: parseFloat(value),
+          kmPorGalon: getKilometroPorGalon(
+            controlCombustible.kmRecorridos,
+            parseFloat(value)
+          ),
+        });
+      } else if (name === "valorCompra") {
+        setControlCombustible({
+          ...controlCombustible,
+          [name]: parseFloat(value),
+          KmPorMoneda: getKilometroPorMoneda(
+            controlCombustible.kmRecorridos,
+            parseFloat(value)
+          ),
+        });
+      }
+    }
   };
 
   const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -119,6 +193,12 @@ export const RegistroForm = () => {
           setControlCombustible={setControlCombustible}
           onChange={onChange}
         />
+        <div
+          className="w-4 h-4 absolute right-0 top-0 cursor-pointer "
+          onClick={handleClearVehiculoConductor}
+        >
+          <img src={trash} alt="" />
+        </div>
       </div>
       <div className="relative w-full z-30 mb-5 group col-span-3">
         <input

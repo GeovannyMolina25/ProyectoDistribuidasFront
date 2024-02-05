@@ -20,6 +20,7 @@ interface VehiculoState {
   obtenerVehiculoPorNombre: (nombre: string) => void;
   establecerVehiculo: (vehiculo: Vehiculo) => void;
   establecerVehiculoPorConductor: (id: number) => void;
+  limpiarVehiculo: () => void;
 }
 
 export const useVehiculoStore = create<VehiculoState>((set) => ({
@@ -71,5 +72,10 @@ export const useVehiculoStore = create<VehiculoState>((set) => ({
       .getState()
       .vehiculos.find((v) => v.id_propietario === id);
     set({ vehiculo: vehiculo });
+  },
+  limpiarVehiculo: () => {
+    set({ vehiculo: null });
+    //traer todos los vehiculos
+    useVehiculoStore.getState().obtenerVehiculos();
   },
 }));

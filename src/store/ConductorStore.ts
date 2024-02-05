@@ -13,6 +13,7 @@ interface ConductorState {
   obtenerConductores: () => void;
   obtenerConductoresPorVehiculo: (vehiculo: string) => void;
   establecerConductor: (conductor: Conductor) => void;
+  limpiarConductor: () => void;
 }
 export const useConductorStore = create<ConductorState>((set) => ({
   conductor: null,
@@ -34,5 +35,10 @@ export const useConductorStore = create<ConductorState>((set) => ({
   },
   establecerConductor: (conductor) => {
     set({ conductor });
+  },
+  limpiarConductor: () => {
+    set({ conductor: null });
+    //traer todos los conductores
+    useConductorStore.getState().obtenerConductores();
   },
 }));
