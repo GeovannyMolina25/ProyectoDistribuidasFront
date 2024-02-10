@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { ControlCombustible } from "./RegistroForm";
+import { ControlCombustible } from "../interfaces/type";
 import { Conductor } from "../interfaces/type";
 import { useConductorStore } from "../store/ConductorStore";
 import { useVehiculoStore } from "../store/VehiculoStore";
@@ -26,14 +26,14 @@ export const InputConductor: FC<InputPropietarioProps> = ({
     isFocusInput: false,
     isFocusDropdown: false,
   });
-  const handleSelectPropietario = (propietario: Conductor) => {
-    establecerConductor(propietario);
+  const handleSelectPropietario = (conductor: Conductor) => {
+    establecerConductor(conductor);
     if (controlCombustible.vehiculo !== "") {
-      establecerVehiculoPorConductor(propietario.id);
+      establecerVehiculoPorConductor(conductor.id_conductor);
     }
     setControlCombustible({
       ...controlCombustible,
-      conductor: propietario.nombre,
+      conductor: conductor.nombre,
     });
     setIsFocusPropietario({
       ...isFocusPropietario,
@@ -41,12 +41,12 @@ export const InputConductor: FC<InputPropietarioProps> = ({
       isFocusDropdown: false,
     });
 
-    obtenerVehiculosPorPropietario(propietario.id);
+    obtenerVehiculosPorPropietario(conductor.id_conductor);
   };
 
   useEffect(() => {
     if (vehiculo) {
-      obtenerConductor(vehiculo.id_propietario);
+      obtenerConductor(vehiculo.id_conductor);
     }
   }, [vehiculo, obtenerConductor, conductores]);
 
@@ -75,8 +75,8 @@ export const InputConductor: FC<InputPropietarioProps> = ({
           })
         }
         type="text"
-        name="propietario"
-        id="propietario"
+        name="conductor"
+        id="conductor"
         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
         placeholder=" "
         required
@@ -85,7 +85,7 @@ export const InputConductor: FC<InputPropietarioProps> = ({
         autoComplete="off"
       />
       <label
-        htmlFor="propietario"
+        htmlFor="conductor"
         className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
       >
         Conductor
@@ -117,7 +117,7 @@ export const InputConductor: FC<InputPropietarioProps> = ({
               <button
                 type="button"
                 onClick={() => handleSelectPropietario(conductor)}
-                key={conductor.id}
+                key={conductor.id_conductor}
                 className="flex justify-between hover:bg-slate-200 py-1 w-full px-2"
               >
                 <span>{conductor.nombre}</span>

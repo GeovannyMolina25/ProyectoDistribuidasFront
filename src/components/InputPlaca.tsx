@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { ControlCombustible } from "./RegistroForm";
+import { ControlCombustible } from "../interfaces/type";
 import { Vehiculo } from "../interfaces/type";
 import { useVehiculoStore } from "../store/VehiculoStore";
 
@@ -34,6 +34,7 @@ export const InputPlaca: FC<InputPropietarioProps> = ({
 
   useEffect(() => {
     if (vehiculo) {
+      console.log(vehiculo);
       setControlCombustible({
         ...controlCombustible,
         placa: vehiculo.placa,
@@ -51,7 +52,12 @@ export const InputPlaca: FC<InputPropietarioProps> = ({
             isFocusDropdown: true,
           })
         }
-        onBlur={() => setIsPlaca({ ...isFocusPlaca, isFocusInput: false })}
+        onBlur={() =>
+          setIsPlaca({
+            ...isFocusPlaca,
+            isFocusInput: false,
+          })
+        }
         type="text"
         name="placa"
         id="placa"
@@ -94,7 +100,7 @@ export const InputPlaca: FC<InputPropietarioProps> = ({
           {vehiculos.length > 0 ? (
             vehiculos.map((vehiculo) => (
               <button
-                key={vehiculo.id}
+                key={vehiculo.id_vehiculo}
                 className="flex justify-between hover:bg-slate-200 py-1 w-full px-2"
                 onClick={() => handleSelectPlaca(vehiculo)}
               >

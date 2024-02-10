@@ -3,8 +3,9 @@ import { API } from "./config";
 
 export const getVehiculos = async (): Promise<Vehiculo[]> => {
   try {
-    const response = await API.get("/vehiculos.json");
-    const vehiculos = response.data;
+    const response = await API.get("/vehiculos");
+    const vehiculos = response.data.map(adapterVehiculo);
+
     return vehiculos;
   } catch (error) {
     console.log(error);
@@ -12,16 +13,25 @@ export const getVehiculos = async (): Promise<Vehiculo[]> => {
   }
 };
 
-export const getVehiculosPorPropietario = async (
-  id_propietario: number
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const adapterVehiculo = (vehiculo: any): Vehiculo => {
+  return {
+    id_vehiculo: vehiculo.id_vehiculo,
+    placa: vehiculo.placa_veh,
+    vehiculo: vehiculo.descripcion_veh,
+    id_conductor: vehiculo.id_conductor,
+  };
+};
+
+export const getVehiculosPorConductor = async (
+  id_conductor: number
 ): Promise<Vehiculo[]> => {
   try {
-    const response = await API.get("/vehiculos.json");
-    const vehiculos = response.data;
-    const vehiculosFiltrados = vehiculos.filter(
-      (vehiculo: Vehiculo) => vehiculo.id_propietario === id_propietario
+    const response = await API.get(
+      `/ControlRegistro/vehiConductor/ ${id_conductor}`
     );
-    return vehiculosFiltrados;
+    const vehiculos = response.data;
+    return vehiculos.map(adapterVehiculo);
   } catch (error) {
     console.log(error);
     return [];
@@ -32,14 +42,12 @@ export const getVehiculosPorNombre = async (
   nombre: string
 ): Promise<Vehiculo[]> => {
   try {
-    const response = await API.get<Vehiculo[]>(`/vehiculos.json`);
-    console.log(nombre);
-    const vehiculos = response.data;
-    const vehiculosFiltrados = vehiculos.filter(
-      (vehiculo: Vehiculo) => vehiculo.vehiculo === nombre
+    const response = await API.get<Vehiculo[]>(
+      `/ControlRegistro/descVehiculo/${nombre}`
     );
-    console.log(vehiculosFiltrados);
-    return vehiculosFiltrados;
+    const vehiculos = response.data.map(adapterVehiculo);
+
+    return vehiculos;
   } catch (error) {
     console.log(error);
     return [];
@@ -48,12 +56,11 @@ export const getVehiculosPorNombre = async (
 
 export const getVehiculoPorPlaca = async (placa: string): Promise<Vehiculo> => {
   try {
-    const response = await API.get<Vehiculo[]>(`/vehiculos.json`);
-    const vehiculos = response.data;
-    const vehiculo = vehiculos.find(
-      (vehiculo: Vehiculo) => vehiculo.placa === placa
+    const response = await API.get<Vehiculo>(
+      `/ControlRegistro/placaDescripcionVehiculo/${placa}`
     );
-    return vehiculo as Vehiculo;
+    const vehiculo = adapterVehiculo(response.data);
+    return vehiculo;
   } catch (error) {
     console.log(error);
     return {} as Vehiculo;
@@ -73,5 +80,16 @@ export const getVehiculoPorNombre = async (
   } catch (error) {
     console.log(error);
     return {} as Vehiculo;
+  }
+};
+
+export const getVehiculosControlCombustible = async (): Promise<Vehiculo[]> => {
+  try {
+    const response = await API.get("/ControlRegistro/getObtenerPlaca");
+    const vehiculos = response.data.map(adapterVehiculo);
+    return vehiculos;
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 };

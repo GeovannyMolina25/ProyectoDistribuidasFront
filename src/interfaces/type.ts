@@ -1,19 +1,20 @@
 export interface Ubicacion {
-  id: number;
+  id_ubicacion: number;
   origen: string;
   destino: string;
 }
 
 export interface Conductor {
-  id: number;
+  id_conductor: number;
   nombre: string;
+  apellido: string;
 }
 
 export interface Vehiculo {
-  id: number;
+  id_vehiculo: number;
   placa: string;
   vehiculo: string;
-  id_propietario: number;
+  id_conductor: number;
 }
 
 export interface ControlCombustible {
@@ -33,4 +34,21 @@ export interface ControlCombustible {
   tipoCombustible: string;
   NumeroDocumento: string;
   comentario: string;
+}
+
+export interface controlCombustibleDashboardDia {
+  consumo_galon_total: number;
+  kilometros_recorridos_total: number;
+  promedio_galonkilometro_total: number;
+  total_gastado: number;
+}
+
+export interface controlCombustibleVehiculoDia {
+  descripcion_vehh: string;
+  placa_vehh: string;
+  total_km_galon: number;
+}
+export interface kilometrosRecorridsControlCombustible {
+  fecha_control: string;
+  km_total: number;
 }

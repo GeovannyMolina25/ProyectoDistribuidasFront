@@ -4,6 +4,7 @@ import {
   getConductor,
   getConductores,
   getConductoresPorVehiculo,
+  getConductoresControlPorFecha,
 } from "../services/conductores.service";
 
 interface ConductorState {
@@ -13,6 +14,7 @@ interface ConductorState {
   obtenerConductores: () => void;
   obtenerConductoresPorVehiculo: (vehiculo: string) => void;
   establecerConductor: (conductor: Conductor) => void;
+  obtenerConductoresControlPorFecha: (fecha: string) => void;
   limpiarConductor: () => void;
 }
 export const useConductorStore = create<ConductorState>((set) => ({
@@ -30,7 +32,9 @@ export const useConductorStore = create<ConductorState>((set) => ({
   },
   obtenerConductoresPorVehiculo: (vehiculo: string) => {
     getConductoresPorVehiculo(vehiculo).then((conductores) => {
-      set({ conductores: conductores });
+      if (conductores.length === 1) {
+        set({ conductor: conductores[0] });
+      } else set({ conductores: conductores });
     });
   },
   establecerConductor: (conductor) => {
@@ -40,5 +44,10 @@ export const useConductorStore = create<ConductorState>((set) => ({
     set({ conductor: null });
     //traer todos los conductores
     useConductorStore.getState().obtenerConductores();
+  },
+  obtenerConductoresControlPorFecha: (fecha: string) => {
+    getConductoresControlPorFecha(fecha).then((conductores) => {
+      set({ conductores });
+    });
   },
 }));

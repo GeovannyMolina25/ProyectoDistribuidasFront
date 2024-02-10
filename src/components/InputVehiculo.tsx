@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { ControlCombustible } from "./RegistroForm";
+import { ControlCombustible } from "../interfaces/type";
 import { Vehiculo } from "../interfaces/type";
 import { useVehiculoStore } from "../store/VehiculoStore";
 import { useConductorStore } from "../store/ConductorStore";
@@ -22,6 +22,7 @@ export const InputVehiculo: FC<InputVehiculoProps> = ({
   const { conductor, obtenerConductoresPorVehiculo } = useConductorStore();
   const handleSelectVehiculo = (vehiculo: Vehiculo) => {
     if (conductor) {
+      console.log("Estoy existiendo");
       console.log(conductor);
     } else {
       obtenerConductoresPorVehiculo(vehiculo.vehiculo);
@@ -110,7 +111,7 @@ export const InputVehiculo: FC<InputVehiculoProps> = ({
               })
               .map((vehiculo) => (
                 <button
-                  key={vehiculo.id}
+                  key={vehiculo.id_vehiculo}
                   className="flex justify-between hover:bg-slate-200 py-1 w-full px-2"
                   onClick={() => handleSelectVehiculo(vehiculo)}
                 >

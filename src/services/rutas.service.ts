@@ -1,16 +1,21 @@
 import { Ubicacion } from "../interfaces/type";
 import { API } from "./config";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const adapterUbicacion = (ubicacion: any): Ubicacion => {
+  return {
+    id_ubicacion: ubicacion.id_ubicacion,
+    origen: ubicacion.origen_ubi,
+    destino: ubicacion.destino_ubi,
+  };
+};
 export const getRutas = async () => {
   try {
-    const response = await API.get<Ubicacion[]>("/rutas.json");
+    const response = await API.get("/ubicacionSinRepetirOrigen");
 
-    const rutasSinRepetir = response.data.filter(
-      (ubicacion, index, self) =>
-        index === self.findIndex((t) => t.origen === ubicacion.origen)
-    );
-
-    return rutasSinRepetir;
+    const rutas = response.data.map(adapterUbicacion);
+    console.log(rutas);
+    return rutas;
   } catch (error) {
     console.log(error);
   }
@@ -18,8 +23,8 @@ export const getRutas = async () => {
 
 export const getRutasRepetidas = async () => {
   try {
-    const response = await API.get<Ubicacion[]>("/rutas.json");
-    return response.data;
+    const response = await API.get<Ubicacion[]>("/ubicacion");
+    return response.data.map(adapterUbicacion);
   } catch (error) {
     console.log(error);
   }
@@ -29,12 +34,11 @@ export const getRutasPorOrigen = async (
   origen: string
 ): Promise<Ubicacion[]> => {
   try {
-    const response = await API.get<Ubicacion[]>("/rutas.json");
-    const rutas = response.data;
-    const rutasFiltradas = rutas.filter(
-      (ruta: Ubicacion) => ruta.origen === origen
+    const response = await API.get<Ubicacion[]>(
+      `/ControlRegistro/UbiFinalPorUbiOrigen/:origen/${origen}`
     );
-    return rutasFiltradas;
+    console.log(response.data);
+    return response.data.map(adapterUbicacion);
   } catch (error) {
     console.log(error);
     return [];

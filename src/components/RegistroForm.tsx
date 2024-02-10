@@ -5,6 +5,7 @@ import { InputConductor } from "./InputConductor";
 import { InputPlaca } from "./InputPlaca";
 import { InputVehiculo } from "./InputVehiculo";
 import { useUbicacionStore } from "../store/UbicacionStore";
+import { Toaster, toast } from "sonner";
 import {
   getKilometroPorGalon,
   getKilometroPorMoneda,
@@ -13,6 +14,7 @@ import {
 import trash from "../assets/trash.svg";
 import { useConductorStore } from "../store/ConductorStore";
 import { useVehiculoStore } from "../store/VehiculoStore";
+import { postControlCombustible } from "../services/controlCombustible.service";
 export const RegistroForm = () => {
   const [isFocusOrigen, setIsFocusOrigen] = useState({
     isFocusInput: false,
@@ -27,6 +29,7 @@ export const RegistroForm = () => {
 
   const { ubicaciones, establecerUbicacion, ubicacion, ubicacionesRepetidas } =
     useUbicacionStore();
+  const { vehiculo } = useVehiculoStore();
   const [controlCombustible, setControlCombustible] =
     useState<ControlCombustible>({
       date: "",
@@ -72,6 +75,30 @@ export const RegistroForm = () => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const dataEnviar = {
+      fecha_control: controlCombustible.date,
+      id_vehiculo: vehiculo?.id_vehiculo,
+      descripcion_veh: controlCombustible.vehiculo,
+      id_ubicacion: ubicacion?.id_ubicacion,
+      km_inicial_controlc: controlCombustible.kmInicial,
+      km_final_controlc: controlCombustible.kmFinal,
+      km_galon_controlc: controlCombustible.kmPorGalon,
+      km_moneda_controlc: controlCombustible.KmPorMoneda,
+      km_recorrido_controlc: controlCombustible.kmRecorridos,
+      galon_controlc: controlCombustible.galon,
+      valorcompra_controlc: controlCombustible.valorCompra,
+      id_combustible: 1,
+      no_documento_controlc: controlCombustible.NumeroDocumento,
+      comentario_controlc: controlCombustible.comentario,
+    };
+    toast.promise(postControlCombustible(dataEnviar), {
+      loading: "Loading...",
+      success: () => {
+        resetFormulario();
+        return `Registro Control Combustible exitoso`;
+      },
+      error: "Error al registrar el control de combustible",
+    });
   };
   const handleClearVehiculoConductor = () => {
     limpiarConductor();
@@ -145,6 +172,28 @@ export const RegistroForm = () => {
         });
       }
     }
+  };
+  const resetFormulario = () => {
+    limpiarConductor();
+    limpiarVehiculo();
+    setControlCombustible({
+      date: "",
+      placa: "",
+      vehiculo: "",
+      conductor: "",
+      origenUbicacion: "",
+      destinoUbicacion: "",
+      kmInicial: 0,
+      kmFinal: 0,
+      kmRecorridos: 0,
+      galon: 0,
+      valorCompra: 0,
+      kmPorGalon: 0,
+      KmPorMoneda: 0,
+      tipoCombustible: "",
+      NumeroDocumento: "",
+      comentario: "",
+    });
   };
 
   const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -245,7 +294,7 @@ export const RegistroForm = () => {
                 <button
                   type="button"
                   onClick={() => handleSelectOrigen(ubicacion)}
-                  key={ubicacion.id}
+                  key={ubicacion.id_ubicacion}
                   className="flex justify-between hover:bg-slate-200 py-1 w-full px-2"
                 >
                   <span>{ubicacion.origen}</span>
@@ -304,7 +353,7 @@ export const RegistroForm = () => {
                 .map((ubicacion) => (
                   <button
                     onClick={() => handleSelectDestino(ubicacion)}
-                    key={ubicacion.id}
+                    key={ubicacion.id_ubicacion}
                     className="flex justify-between hover:bg-slate-200 py-1 w-full px-2"
                   >
                     <span>{ubicacion.destino}</span>
@@ -445,6 +494,7 @@ export const RegistroForm = () => {
       >
         Submit
       </button>
+      <Toaster />
     </form>
   );
 };
